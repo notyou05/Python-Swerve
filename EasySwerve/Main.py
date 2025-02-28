@@ -1,3 +1,5 @@
+import math
+
 
 class easyswerve:
     def __init__(self, max_speed: float, max_turn_speed: float, max_acceleration: float, encoderoffset: float): #add encoder offset for all modules
@@ -19,7 +21,7 @@ class easyswerve:
 
     """sets drive mode"""
     def joystick_input(self, left_joystick_x, left_joystick_y, right_joystick_x):
-        robot_centric_angle_to_drive = atan2(left_joystick_y, left_joystick_x)
+        robot_centric_angle_to_drive = math.atan2(left_joystick_y, left_joystick_x)
         robot_centric_speed_to_drive = math.sqrt(left_joystick_x**2 + left_joystick_y**2) * self.max_speed #add acselration constant later
         rotation_to_drive = right_joystick_x * self.max_turn_speed
 
