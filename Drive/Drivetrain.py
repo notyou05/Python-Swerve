@@ -6,6 +6,8 @@ import wpimath.geometry
 import wpimath.kinematics
 import ntcore
 from wpimath.kinematics import SwerveModuleState
+
+import Constants
 from Drive.SwerveModule import SwerveModule  # Ensure this import is correct
 
 kMaxSpeed = 5.0  # 3 meters per second
@@ -57,7 +59,7 @@ class Drivetrain:
 
         chassis_speeds = (
             wpimath.kinematics.ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, rot, self.gyro.getRotation2d()
+                xSpeed*Constants.max_speed, ySpeed*Constants.max_speed, rot*Constants.max_rot_speed, self.gyro.getRotation2d()
             )
             if fieldRelative
             else wpimath.kinematics.ChassisSpeeds(xSpeed, ySpeed, rot)
