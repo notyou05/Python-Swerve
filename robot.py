@@ -1,17 +1,19 @@
-import wpilib.drive
-import Constants
-from Constants import driver_controller
-from Easy_Swerve import joystick_input
+import wpilib
+from Drive.Drivetrain import Drivetrain
 
 class MyRobot(wpilib.TimedRobot):
+    def robotInit(self) -> None:
+        """Initialize robot components."""
+        self.drivetrain = Drivetrain()
+        self.driverController = wpilib.XboxController(0)
+    def teleopPeriodic(self) -> None:
+        """Drive with joystick during teleop."""
+        self.drivetrain.drive(self.driverController.getLeftY(), self.driverController.getLeftX(), self.driverController.getRightX(), fieldRelative=False, periodSeconds=self.getPeriod())
 
-    def robotInit(self):
-        self.driverController = wpilib.XboxController(driver_controller)
+    def simulationPeriodic(self):
+        """Updates simulation physics."""
+        self.drivetrain.simulationPeriodic()
 
 
-    def teleopPeriodic(self):
-        left_joystick_x = -self.driverController.getLeftX(),
-        left_joystick_y = -self.driverController.getRightY()
-        right_joystick_x =  -self.driverController.getRightX()
-
-        joystick_input(left_joystick_x, left_joystick_y, right_joystick_x)
+if __name__ == "__main__":
+    wpilib.run(MyRobot)

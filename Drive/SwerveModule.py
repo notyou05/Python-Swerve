@@ -1,34 +1,41 @@
-from wpimath.controller import PIDController
-from phoenix6 import hardware, controls
+import phoenix6
+import math
+
+import Constants
 
 
 class SwerveModule:
-    def __init__(self, drive_id: int, steer_id: int, encoder_id: int, encoder_offset: float):
-        self.drive_id = drive_id
-        self.steer_id = steer_id
-        self.encoder_offset = encoder_offset
+    def __init__(
+        self,
+        driveMotorID: int,
+        turningMotorID: int,
+        CANcoderID: int,
+        CanCoderOffset: int,
+    ) -> None:
+        self.driveMotor = phoenix6.TalonFX(driveMotorID)
+        self.turningMotor = phoenix6.TalonFX(turningMotorID)
+        self.turningEncoder = phoenix6.CANcoder(CANcoderID)
 
-        self.cancoder = hardware.CANcoder(encoder_id)
-        self.drive_motor = hardware.TalonFX(drive_id)
-        self.steer_motor = hardware.TalonFX(steer_id)
+    def getState(self):
+        """Returns the current state of the swerve module."""
+        return None  # Replace with actual implementation
 
-        # PID Controller for steering
-        self.steer_pid = PIDController(0.1, 0.0, 0.0)  # Adjust these values
 
-        # Control object for drive motor
-        self.drive_control = controls.DutyCycleOut(0)
 
-    def set_state(self, module_state: list[float, float]):
-        wheel_speed, steer_angle = module_state  # Get list values
+    def setDesiredState(self, state):
+        """Sets the desired state of the swerve module."""
+        pass  # Replace with actual implementation
 
-        # Set the drive motor speed
-        self.drive_motor.set(wheel_speed)
 
-        # Get the current steering angle (extract float from StatusSignal)
-        current_angle = self.cancoder.get_position().value
 
-        # Compute PID output
-        pid_output = self.steer_pid.calculate(current_angle, steer_angle)
 
-        # Set the control output for the steering motor
-        self.steer_motor.set_control(controls.DutyCycleOut(pid_output))
+    def calculate_drive_speed(self):
+        motor_rps = self.driveMotor.getVelocity().value  # Get motor RPS
+        wheel_rps = motor_rps / Constants.DriveGearRatio  # Adjust for gear ratio
+
+        # Calculate the linear velocity in m/s
+        velocity_meter_per_second = 2 * math.pi * Constants.wheel_diameter * wheel_rps
+        return velocity_meter_per_second
+
+
+
