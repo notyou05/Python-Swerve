@@ -14,6 +14,15 @@
     },
     "transitory": {
       "Pose2d[]##v_/Pose2D": {
+        "Pose2d##v_[0]": {
+          "Rotation2d##v_rotation": {
+            "open": true
+          },
+          "Translation2d##v_translation": {
+            "open": true
+          },
+          "open": true
+        },
         "open": true
       },
       "SwerveModuleState[]##v_/SwerveStates": {

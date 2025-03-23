@@ -1,15 +1,9 @@
-#
-# Copyright (c) FIRST and other WPILib contributors.
-# Open Source Software; you can modify and/or share it under the terms of
-# the WPILib BSD license file in the root directory of this project.
-#
-
 import math
 import wpilib
 import wpimath.geometry
 import wpimath.kinematics
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
-
+import Drive.SwervePhysicsEngine
 import Drive.SwerveModule
 import ntcore
 from wpimath.kinematics import SwerveModuleState
@@ -29,6 +23,7 @@ class Drivetrain:
         self.backLeftLocation = wpimath.geometry.Translation2d(-0.381, 0.381)
         self.backRightLocation = wpimath.geometry.Translation2d(-0.381, -0.381)
 
+        # Initialize SwerveModules with correct port IDs for your hardware
         self.frontLeft = Drive.SwerveModule.SwerveModule(1, 2, 0, 1)
         self.frontRight = Drive.SwerveModule.SwerveModule(3, 4, 4, 5)
         self.backLeft = Drive.SwerveModule.SwerveModule(5, 6, 8, 9)
@@ -90,6 +85,14 @@ class Drivetrain:
 
         self.pub.set([swerveModuleStates[0], swerveModuleStates[1], swerveModuleStates[2], swerveModuleStates[3]])  # Publish the states to the network table
 
-        swerve_engine = Drive.
-        #pose = Pose2d(1.0, 2.0, Rotation2d.fromDegrees(45))
-        self.pub2.set([SwervePhysicsEngine.Pose2d])  # Publish the pose to the network table
+        # Assuming the update method does not require self as a parameter
+        swerve_engine = Drive.SwervePhysicsEngine.SwervePhysicsEngine(0, 0, 0, 1, 1, 1, 1)
+        swerve_engine.update(xSpeed, ySpeed, rot)
+
+        # Getting the current state after update
+        current_state = swerve_engine.get_state()
+
+        # Assuming current_state is a tuple with X, Y, Rotation in that order
+        pose = Pose2d(current_state[0], current_state[1], Rotation2d.fromDegrees(current_state[2]))
+        self.pub2.set([pose])  # Publish the pose to the network table
+
