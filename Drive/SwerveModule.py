@@ -1,6 +1,6 @@
 import phoenix6
 import math
-
+from phoenix6 import hardware, controls
 import Constants
 
 
@@ -12,9 +12,9 @@ class SwerveModule:
         CANcoderID: int,
         CanCoderOffset: int,
     ) -> None:
-        self.driveMotor = phoenix6.TalonFX(driveMotorID)
-        self.turningMotor = phoenix6.TalonFX(turningMotorID)
-        self.turningEncoder = phoenix6.CANcoder(CANcoderID)
+        self.driveMotor = hardware.TalonFX(driveMotorID)
+        self.turningMotor = hardware.TalonFX(turningMotorID)
+        self.turningEncoder = hardware.CANcoder(CANcoderID)
 
     def getState(self):
         """Returns the current state of the swerve module."""
@@ -36,6 +36,9 @@ class SwerveModule:
         # Calculate the linear velocity in m/s
         velocity_meter_per_second = 2 * math.pi * Constants.wheel_diameter * wheel_rps
         return velocity_meter_per_second
+
+    def getPosition(self):
+        return [1,1]
 
 
 
